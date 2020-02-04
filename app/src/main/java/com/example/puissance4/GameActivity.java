@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.View;
@@ -36,6 +37,8 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase15;
     private ImageView mCase16;
 
+    private ArrayList<ImageView> Cases1 = new ArrayList<ImageView>();
+    private int c1=0;
 
     //Button 2
     private ImageView mCase21;
@@ -45,6 +48,9 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase25;
     private ImageView mCase26;
 
+    private ArrayList<ImageView> Cases2 = new ArrayList<ImageView>();
+    private int c2=0;
+
     //Button 3
     private ImageView mCase31;
     private ImageView mCase32;
@@ -52,6 +58,9 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase34;
     private ImageView mCase35;
     private ImageView mCase36;
+
+    private ArrayList<ImageView> Cases3 = new ArrayList<ImageView>();
+    private int c3=0;
 
 
     //Button 4
@@ -62,6 +71,9 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase45;
     private ImageView mCase46;
 
+    private ArrayList<ImageView> Cases4 = new ArrayList<ImageView>();
+    private int c4=0;
+
 
     //Button 5
     private ImageView mCase51;
@@ -70,6 +82,9 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase54;
     private ImageView mCase55;
     private ImageView mCase56;
+
+    private ArrayList<ImageView> Cases5 = new ArrayList<ImageView>();
+    private int c5=0;
 
 
     //Button 6
@@ -80,6 +95,9 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase65;
     private ImageView mCase66;
 
+    private ArrayList<ImageView> Cases6 = new ArrayList<ImageView>();
+    private int c6=0;
+
 
     //Button 7
     private ImageView mCase71;
@@ -89,19 +107,27 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase75;
     private ImageView mCase76;
 
+    private ArrayList<ImageView> Cases7 = new ArrayList<ImageView>();
+    private int c7=0;
+
 
     private boolean TourJoueur = true;
-    private Object Button;
 
-    public void Apparition(Button col, ImageView C){
-        if(TourJoueur) {
-            C.setColorFilter(Color.argb(255,255,0,0));
-            TourJoueur = false;
+
+    public int Apparition(Button col, ArrayList<ImageView> c, int i) {
+
+        if (i < 6) {
+            if (TourJoueur) {
+                c.get(i).setColorFilter(Color.argb(255, 255, 0, 0));
+                TourJoueur = false;
+            } else {
+                c.get(i).setColorFilter(Color.argb(255, 0, 0, 255));
+                TourJoueur = true;
+            }
+            i++;
         }
-        else{
-            C.setColorFilter(Color.argb(255,0,0,255));
-            TourJoueur = true;
-        }
+
+        return i;
     }
 
     /*
@@ -138,49 +164,124 @@ public class GameActivity extends AppCompatActivity {
         mCol6 = (Button) findViewById(R.id.button6);
         mCol7 = (Button) findViewById(R.id.button7);
 
-        mCase11 = (ImageView) findViewById(R.id.case11);
-        mCase12 = (ImageView) findViewById(R.id.case12);
-        mCase13 = (ImageView) findViewById(R.id.case13);
-        mCase14 = (ImageView) findViewById(R.id.case14);
-        mCase15 = (ImageView) findViewById(R.id.case15);
-        mCase16 = (ImageView) findViewById(R.id.case16);
 
-        mCase21 = (ImageView) findViewById(R.id.case21);
-        mCase31 = (ImageView) findViewById(R.id.case31);
-        mCase41 = (ImageView) findViewById(R.id.case41);
-        mCase51 = (ImageView) findViewById(R.id.case51);
-        mCase61= (ImageView) findViewById(R.id.case61);
-        mCase71 = (ImageView) findViewById(R.id.case71);
+        //Button 1
+
+        Cases1.add(mCase11 = (ImageView) findViewById(R.id.case11));
+        Cases1.add(mCase12 = (ImageView) findViewById(R.id.case12));
+        Cases1.add(mCase13 = (ImageView) findViewById(R.id.case13));
+        Cases1.add(mCase14 = (ImageView) findViewById(R.id.case14));
+        Cases1.add(mCase15 = (ImageView) findViewById(R.id.case15));
+        Cases1.add(mCase16 = (ImageView) findViewById(R.id.case16));
 
 
-       // ArrayList<ImageView> Cases;
+        //Button 2
+
+        Cases2.add(mCase21 = (ImageView) findViewById(R.id.case21));
+        Cases2.add(mCase22 = (ImageView) findViewById(R.id.case22));
+        Cases2.add(mCase23 = (ImageView) findViewById(R.id.case23));
+        Cases2.add(mCase24 = (ImageView) findViewById(R.id.case24));
+        Cases2.add(mCase25 = (ImageView) findViewById(R.id.case25));
+        Cases2.add(mCase26 = (ImageView) findViewById(R.id.case26));
+
+        //Button 3
+
+        Cases3.add(mCase31 = (ImageView) findViewById(R.id.case31));
+        Cases3.add(mCase32 = (ImageView) findViewById(R.id.case32));
+        Cases3.add(mCase33 = (ImageView) findViewById(R.id.case33));
+        Cases3.add(mCase34 = (ImageView) findViewById(R.id.case34));
+        Cases3.add(mCase35 = (ImageView) findViewById(R.id.case35));
+        Cases3.add(mCase36 = (ImageView) findViewById(R.id.case36));
+
+
+        //Button 4
+
+        Cases4.add(mCase41 = (ImageView) findViewById(R.id.case41));
+        Cases4.add(mCase42 = (ImageView) findViewById(R.id.case42));
+        Cases4.add(mCase43 = (ImageView) findViewById(R.id.case43));
+        Cases4.add(mCase44 = (ImageView) findViewById(R.id.case44));
+        Cases4.add(mCase45 = (ImageView) findViewById(R.id.case45));
+        Cases4.add(mCase46 = (ImageView) findViewById(R.id.case46));
+
+        //Button 5
+
+        Cases5.add(mCase51 = (ImageView) findViewById(R.id.case51));
+        Cases5.add(mCase52 = (ImageView) findViewById(R.id.case52));
+        Cases5.add(mCase53 = (ImageView) findViewById(R.id.case53));
+        Cases5.add(mCase54 = (ImageView) findViewById(R.id.case54));
+        Cases5.add(mCase55 = (ImageView) findViewById(R.id.case55));
+        Cases5.add(mCase56 = (ImageView) findViewById(R.id.case56));
+
+
+        //Button 6
+
+        Cases6.add(mCase61 = (ImageView) findViewById(R.id.case61));
+        Cases6.add(mCase62 = (ImageView) findViewById(R.id.case62));
+        Cases6.add(mCase63 = (ImageView) findViewById(R.id.case63));
+        Cases6.add(mCase64 = (ImageView) findViewById(R.id.case64));
+        Cases6.add(mCase65 = (ImageView) findViewById(R.id.case65));
+        Cases6.add(mCase66 = (ImageView) findViewById(R.id.case66));
+
+
+        //Button 7
+
+        Cases7.add(mCase71 = (ImageView) findViewById(R.id.case71));
+        Cases7.add(mCase72 = (ImageView) findViewById(R.id.case72));
+        Cases7.add(mCase73 = (ImageView) findViewById(R.id.case73));
+        Cases7.add(mCase74 = (ImageView) findViewById(R.id.case74));
+        Cases7.add(mCase75 = (ImageView) findViewById(R.id.case75));
+        Cases7.add(mCase76 = (ImageView) findViewById(R.id.case76));
+
 
 
         mCol1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Apparition(mCol1,mCase11);
+                c1=Apparition(mCol1,Cases1,c1);
             }
         });
 
         mCol2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Apparition(mCol2,mCase21);
+                c2=Apparition(mCol2,Cases2,c2);
             }
         });
 
         mCol3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Apparition(mCol3,mCase31);
+                c3=Apparition(mCol3,Cases3,c3);
             }
         });
 
+        mCol4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c4=Apparition(mCol4,Cases4,c4);
+            }
+        });
 
+        mCol5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c5=Apparition(mCol5,Cases5,c5);
+            }
+        });
 
+        mCol6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c6=Apparition(mCol6,Cases6,c6);
+            }
+        });
 
-
+        mCol7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                c7=Apparition(mCol7,Cases7,c7);
+            }
+        });
 
     }
 }
