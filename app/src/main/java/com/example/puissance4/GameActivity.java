@@ -2,9 +2,11 @@ package com.example.puissance4;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
 
 import java.util.ArrayList;
 
@@ -27,7 +30,7 @@ public class GameActivity extends AppCompatActivity {
     private Button mCol6;
     private Button mCol7;
 
-    //Case type: coordonées xy
+    //Case type: coordonées yx{
 
     //Button 1
     private ImageView mCase11;
@@ -110,45 +113,57 @@ public class GameActivity extends AppCompatActivity {
     private ArrayList<ImageView> Cases7 = new ArrayList<ImageView>();
     private int c7=0;
 
+////////////////
 
     private boolean TourJoueur = true;
 
 
-    public int Apparition(Button col, ArrayList<ImageView> c, int i) {
 
-        if (i < 6) {
+    public int Apparition(Button col, ArrayList<ImageView> c, int y,int x) {
+
+        if (y < 6) {
             if (TourJoueur) {
-                c.get(i).setColorFilter(Color.argb(255, 255, 0, 0));
+                c.get(y).setColorFilter(Color.argb(255, 255, 0, 0));
+                tab[y][x]=1;
                 TourJoueur = false;
             } else {
-                c.get(i).setColorFilter(Color.argb(255, 0, 0, 255));
+                c.get(y).setColorFilter(Color.argb(255, 0, 0, 255));
+                tab[y][x]=2;
                 TourJoueur = true;
             }
-            i++;
+            y++;
         }
+        boolean Stop =Gagner(tab);
+        if (Stop)
+            FinJeu();
 
-        return i;
+        return y;
     }
 
-    /*
-    public void Clique(final Button col, final ImageView c){
-        col.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                if(TourJoueur) {
-                    c.setColorFilter(Color.argb(1,255,0,0));
-                    TourJoueur = false;
-                }
-                else{
-                    c.setColorFilter(Color.argb(1,0,0,255));
-                    TourJoueur = true;
-                }
 
+    public boolean Gagner(int[][] table){
+        for (int i = 0; i < table.length; i++) {
+            for (int j = 0; j < table[i].length; j++) {
+
+                if (tab[i][j]!=0) {
+                    // Vérification vertical
+                    if (table[i][j] == table[i + 1][j] && table[i + 1][j] == table[i + 2][j] && table[i + 2][j] == table[i + 3][j])
+                        return true;
+                        //Vérification horizontal
+                    else if (table[i][j] == table[i][j + 1] && table[i][j + 1] == table[i][j + 2] && table[i][j + 2] == table[i][j + 3])
+                        return true;
+                    else if (table[i][j] == table[i+1][j + 1] && table[i+1][j + 1] == table[i+2][j + 2] && table[i+2][j + 2] == table[i+3][j + 3])
+                        return true;
+                    else
+                        return false;
+                }
             }
-        });
-    };*/
+        }
+        return false;
+    }
 
+    public int[][] tab =new int[7][8];
 
 
     @Override
@@ -237,52 +252,83 @@ public class GameActivity extends AppCompatActivity {
         mCol1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c1=Apparition(mCol1,Cases1,c1);
+                c1=Apparition(mCol1,Cases1,c1,0);
             }
         });
 
         mCol2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c2=Apparition(mCol2,Cases2,c2);
+                c2=Apparition(mCol2,Cases2,c2,1);
             }
         });
 
         mCol3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c3=Apparition(mCol3,Cases3,c3);
+                c3=Apparition(mCol3,Cases3,c3,2);
             }
         });
 
         mCol4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c4=Apparition(mCol4,Cases4,c4);
+                c4=Apparition(mCol4,Cases4,c4,3);
             }
         });
 
         mCol5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c5=Apparition(mCol5,Cases5,c5);
+                c5=Apparition(mCol5,Cases5,c5,4);
             }
         });
 
         mCol6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c6=Apparition(mCol6,Cases6,c6);
+                c6=Apparition(mCol6,Cases6,c6,5);
             }
         });
 
         mCol7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c7=Apparition(mCol7,Cases7,c7);
+                c7=Apparition(mCol7,Cases7,c7,6);
+
             }
+
         });
 
+
+
+
+
+    }
+
+
+    public void FinJeu(){
+        //Boîte de dialogue
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setTitle("Gagné")
+                .setMessage("Le Joueur: " + "Untel" +"  a Gagné!!")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Fin de l'activité
+                        finish();
+                    }
+                })
+                .setOnDismissListener(new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        //Fin de l'activité (Cas ou l'user ferme le dialogue sans passer par "ok"
+                        finish();
+                    }
+                })
+                .create()
+                .show();
     }
 }
 
