@@ -117,9 +117,7 @@ public class GameActivity extends AppCompatActivity {
 
     private boolean TourJoueur = true;
 
-
-
-    public int Apparition(Button col, ArrayList<ImageView> c, int y,int x) {
+    public int Apparition(ArrayList<ImageView> c, int y,int x) {
 
         if (y < 6) {
             if (TourJoueur) {
@@ -140,14 +138,9 @@ public class GameActivity extends AppCompatActivity {
         return y;
     }
 
-
-
     public boolean Gagner(int[][] table){
         for (int i = 0; i < table.length; i++) {
-            System.out.println("\n");
             for (int j = 0; j < table[i].length; j++) {
-                System.out.println(table[i][j]);
-
                 try {
                     if (table[i][j]!= 0){
                         // Vérification vertical
@@ -166,7 +159,6 @@ public class GameActivity extends AppCompatActivity {
                 }
                 catch(Exception e){
                     }
-
             }
         }
         return false;
@@ -261,49 +253,49 @@ public class GameActivity extends AppCompatActivity {
         mCol1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c1=Apparition(mCol1,Cases1,c1,0);
+                c1=Apparition(Cases1,c1,0);
             }
         });
 
         mCol2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c2=Apparition(mCol2,Cases2,c2,1);
+                c2=Apparition(Cases2,c2,1);
             }
         });
 
         mCol3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c3=Apparition(mCol3,Cases3,c3,2);
+                c3=Apparition(Cases3,c3,2);
             }
         });
 
         mCol4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c4=Apparition(mCol4,Cases4,c4,3);
+                c4=Apparition(Cases4,c4,3);
             }
         });
 
         mCol5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c5=Apparition(mCol5,Cases5,c5,4);
+                c5=Apparition(Cases5,c5,4);
             }
         });
 
         mCol6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c6=Apparition(mCol6,Cases6,c6,5);
+                c6=Apparition(Cases6,c6,5);
             }
         });
 
         mCol7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c7=Apparition(mCol7,Cases7,c7,6);
+                c7=Apparition(Cases7,c7,6);
 
             }
 
