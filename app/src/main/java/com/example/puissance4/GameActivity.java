@@ -144,26 +144,35 @@ public class GameActivity extends AppCompatActivity {
 
     public boolean Gagner(int[][] table){
         for (int i = 0; i < table.length; i++) {
+            System.out.println("\n");
             for (int j = 0; j < table[i].length; j++) {
+                System.out.println(table[i][j]);
 
-                if (tab[i][j]!=0) {
-                    // Vérification vertical
-                    if (table[i][j] == table[i + 1][j] && table[i + 1][j] == table[i + 2][j] && table[i + 2][j] == table[i + 3][j])
-                        return true;
-                        //Vérification horizontal
-                    else if (table[i][j] == table[i][j + 1] && table[i][j + 1] == table[i][j + 2] && table[i][j + 2] == table[i][j + 3])
-                        return true;
-                    else if (table[i][j] == table[i+1][j + 1] && table[i+1][j + 1] == table[i+2][j + 2] && table[i+2][j + 2] == table[i+3][j + 3])
-                        return true;
-                    else
-                        return false;
+                try {
+                    if (table[i][j]!= 0){
+                        // Vérification vertical
+                        if (table[i][j] == table[i + 1][j] && table[i + 1][j] == table[i + 2][j] && table[i + 2][j] == table[i + 3][j])
+                            return true;
+                            //Vérification horizontal
+                        else if (table[i][j] == table[i][j + 1] && table[i][j + 1] == table[i][j + 2] && table[i][j + 2] == table[i][j + 3])
+                            return true;
+                            //verification diagonale
+                        else if (table[i][j] == table[i + 1][j + 1] && table[i + 1][j + 1] == table[i + 2][j + 2] && table[i + 2][j + 2] == table[i + 3][j + 3])
+                            return true;
+                            //verification diagonale
+                        else if (table[i][j] == table[i - 1][j + 1] && table[i - 1][j + 1] == table[i - 2][j + 2] && table[i - 2][j + 2] == table[i - 3][j + 3])
+                            return true;
+                    }
                 }
+                catch(Exception e){
+                    }
+
             }
         }
         return false;
     }
 
-    public int[][] tab =new int[7][8];
+    public int[][] tab =new int[6][7];
 
 
     @Override
