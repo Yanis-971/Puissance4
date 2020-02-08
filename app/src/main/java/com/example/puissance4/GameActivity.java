@@ -115,6 +115,10 @@ public class GameActivity extends AppCompatActivity {
 
 ////////////////
 
+    public static final String BUNDLE_EXTRA_SCORE ="BUNDLE_EXTRA_SCORE";
+    private int mScore;
+    public static final String BUNDLE_STATE_SCORE = "currentScore";
+
     private boolean TourJoueur = true;
 
     public int Apparition(ArrayList<ImageView> c, int y,int x) {
@@ -303,13 +307,28 @@ public class GameActivity extends AppCompatActivity {
 
 
 
+        if (savedInstanceState != null) {
+            mScore = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
+            System.out.println("Score dans saved instance" +mScore);
 
+        } else {
+            mScore = 0;
+            System.out.println("Score dans dans le else" +mScore);
+        }
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+
+        outState.putInt(BUNDLE_STATE_SCORE, mScore);
+        super.onSaveInstanceState(outState);
     }
 
 
     public void FinJeu(){
         //Boîte de dialogue
+        mScore ++;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle("Gagné")
@@ -318,6 +337,9 @@ public class GameActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Fin de l'activité
+                        Intent intent =new Intent();
+                        intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
+                        setResult(RESULT_OK,intent);
                         finish();
                     }
                 })
@@ -325,6 +347,9 @@ public class GameActivity extends AppCompatActivity {
                     @Override
                     public void onDismiss(DialogInterface dialog) {
                         //Fin de l'activité (Cas ou l'user ferme le dialogue sans passer par "ok"
+                        Intent intent =new Intent();
+                        intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
+                        setResult(RESULT_OK,intent);
                         finish();
                     }
                 })

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ClassementActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/classement_main_Titre_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Classement"
+        android:textColor="@color/colorPrimary"
+        android:textStyle="bold"
+        android:layout_margin="10dp"/>
+
+    <ListView
+        android:id="@+id/classement_main_classement_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_margin="3dp"
+        android:background="@color/colorAccent"
+        android:divider="#FFFFFF"
+        android:dividerHeight="2dp">
+
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal">
+
+        <Button
+            android:id="@+id/classement_main_numerique_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Numérique" />
+
+        <Button
+            android:id="@+id/classement_main_alphabetique_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Alphabétique" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
