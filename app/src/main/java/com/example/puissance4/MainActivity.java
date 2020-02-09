@@ -1,9 +1,11 @@
 package com.example.puissance4;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
@@ -24,6 +26,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,10 +38,13 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView mBienvenue;
     private EditText mPseudo;
+    private EditText mPseudo2;
     private Button mJouer;
     private Button mClassement;
+    private boolean V2ok = false;
 
     private User mUser;
+    private User mUser2;
     private SharedPreferences mPreferences;
     public static final int GAME_ACTIVITY_REQUEST_CODE = 2;
 
@@ -156,6 +162,7 @@ public class MainActivity extends AppCompatActivity {
         mJouer = (Button) findViewById(R.id.activity_main_jouer_btn);
         mClassement = (Button) findViewById(R.id.activity_main_classement_btn);
         mUser =new User();
+        mUser2=new User();
 
 
         mJouer.setEnabled(false);
@@ -234,14 +241,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mUser.setFirstname(mPseudo.getText().toString());
                 mPreferences.edit().putString(PREF_KEY_FIRSTNAME, mUser.getFirstname()).apply();
+                ChoixOptions();
 
 
-
-                //Changement d'activité
-                Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
-                gameActivity.putExtra("Username1",mPseudo.getText().toString());
-                System.out.println(mPseudo.getText()+"gettext()  "+mPseudo.getText().toString()+"tostring()");
-                startActivityForResult(gameActivity,GAME_ACTIVITY_REQUEST_CODE);
             }
         });
 
@@ -255,6 +257,81 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    public void ChoixOptions(){
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        View mView = getLayoutInflater().inflate(R.layout.activity_dialog,null);
+        TextView mTitle = mView.findViewById(R.id.Title);
+        Button mVersus = mView.findViewById((R.id.Versus));
+        Button mSolo = mView.findViewById((R.id.Solo));
+        mPseudo2 = mView.findViewById(R.id.Username2);
+        mPseudo2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().length()!=0)
+                    V2ok = true;
+                else
+                    V2ok=false;
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        builder.setView(mView);
+        final AlertDialog mOptions = builder.create();
+        mOptions.show();
+
+
+        mVersus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println(V2ok);
+                if (V2ok){
+                    //Changement d'activité
+                    mUser2.setFirstname(mPseudo2.getText().toString());
+                    Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
+                    gameActivity.putExtra("Username1",mUser.getFirstname());
+                    gameActivity.putExtra("Username2",mUser2.getFirstname());
+                    gameActivity.putExtra("MODE",1);
+                    System.out.println(mPseudo.getText()+"gettext()  "+mPseudo.getText().toString()+"tostring()");
+                    startActivityForResult(gameActivity,GAME_ACTIVITY_REQUEST_CODE);
+                    mOptions.dismiss();
+                    V2ok=false;
+
+
+                }
+                else {
+                    mPseudo2.setVisibility(View.VISIBLE);
+                    Toast.makeText(MainActivity.this, "Enter 2nd Username", Toast.LENGTH_SHORT).show();
+
+                }
+
+            }
+        });
+
+        mSolo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
+                gameActivity.putExtra("Username1",mPseudo.getText().toString());
+                gameActivity.putExtra("Username2","COM");
+                gameActivity.putExtra("MODE",2);
+                startActivityForResult(gameActivity,GAME_ACTIVITY_REQUEST_CODE);
+                mOptions.dismiss();
+                V2ok=false;
+            }
+        });
+                mOptions.show();
     }
 
 

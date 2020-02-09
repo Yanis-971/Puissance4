@@ -199,7 +199,7 @@ public class GameActivity extends AppCompatActivity {
         Intent ActivData = getIntent();
         mPlayer1.setText(ActivData.getStringExtra("Username1"));
 
-        mPlayer2.setText("COM");
+        mPlayer2.setText(ActivData.getStringExtra("Username2"));
 
         mCol1 = findViewById(R.id.button1);
         mCol2 = findViewById(R.id.button2);
