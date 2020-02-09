@@ -12,15 +12,18 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 
 import java.util.ArrayList;
 
 public class GameActivity extends AppCompatActivity {
+
 
     private Button mCol1;
     private Button mCol2;
@@ -74,7 +77,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase45;
     private ImageView mCase46;
 
-    private ArrayList<ImageView> Cases4 = new ArrayList<ImageView>();
+    private ArrayList<ImageView>  Cases4 = new ArrayList<ImageView>();
     private int c4=0;
 
 
@@ -115,9 +118,23 @@ public class GameActivity extends AppCompatActivity {
 
 ////////////////
 
+    private TextView mPlayer1;
+    private TextView mPlayer2;
+
+    ////////
+
+    //Sauvegarde pour changement d'activités
     public static final String BUNDLE_EXTRA_SCORE ="BUNDLE_EXTRA_SCORE";
-    private int mScore;
+
+    //Sauvegarde pour instance
     public static final String BUNDLE_STATE_SCORE = "currentScore";
+
+    private static final String BUNDLE_STATE_CASE1 = "LiseteColonne1" ;
+
+    private  static  final String BUNDLE_STATE_C1 = "ValeurC1";
+
+
+    private int mScore;
 
     private boolean TourJoueur = true;
 
@@ -176,13 +193,21 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        mCol1 = (Button) findViewById(R.id.button1);
-        mCol2 = (Button) findViewById(R.id.button2);
-        mCol3 = (Button) findViewById(R.id.button3);
-        mCol4 = (Button) findViewById(R.id.button4);
-        mCol5 = (Button) findViewById(R.id.button5);
-        mCol6 = (Button) findViewById(R.id.button6);
-        mCol7 = (Button) findViewById(R.id.button7);
+        mPlayer1 = findViewById(R.id.Player1);
+        mPlayer2 = findViewById(R.id.Player2);
+
+        Intent ActivData = getIntent();
+        mPlayer1.setText(ActivData.getStringExtra("Username1"));
+
+        mPlayer2.setText("COM");
+
+        mCol1 = findViewById(R.id.button1);
+        mCol2 = findViewById(R.id.button2);
+        mCol3 = findViewById(R.id.button3);
+        mCol4 = findViewById(R.id.button4);
+        mCol5 = findViewById(R.id.button5);
+        mCol6 = findViewById(R.id.button6);
+        mCol7 = findViewById(R.id.button7);
 
 
         //Button 1
@@ -322,6 +347,8 @@ public class GameActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
 
         outState.putInt(BUNDLE_STATE_SCORE, mScore);
+        outState.putInt(BUNDLE_STATE_C1,c1);
+
         super.onSaveInstanceState(outState);
     }
 
@@ -330,7 +357,6 @@ public class GameActivity extends AppCompatActivity {
         //Boîte de dialogue
         mScore ++;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
         builder.setTitle("Gagné")
                 .setMessage("Le Joueur: " + "Untel" +"  a Gagné!!")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

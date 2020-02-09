@@ -18,9 +18,11 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -233,8 +235,12 @@ public class MainActivity extends AppCompatActivity {
                 mUser.setFirstname(mPseudo.getText().toString());
                 mPreferences.edit().putString(PREF_KEY_FIRSTNAME, mUser.getFirstname()).apply();
 
+
+
                 //Changement d'activité
                 Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
+                gameActivity.putExtra("Username1",mPseudo.getText().toString());
+                System.out.println(mPseudo.getText()+"gettext()  "+mPseudo.getText().toString()+"tostring()");
                 startActivityForResult(gameActivity,GAME_ACTIVITY_REQUEST_CODE);
             }
         });
