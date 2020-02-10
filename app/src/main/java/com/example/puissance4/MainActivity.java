@@ -12,6 +12,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.text.Editable;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String BUNDLE_BEST_SCORE ="BUNDLE_BEST_SCORE";
     public static final String BUNDLE_BEST_FIRSTNAME = "BUNDLE_BEST_FIRSTNAME";
 
+    ///////////////////
+    //DataBaseHelper myDB;
+    ///////////////////////////
     private  User mU1;
     private  User mU2;
     private  User mU3;
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
             //int score = mPreferences.getInt(PREF_KEY_SCORE,0);
             int WinnerScore = data.getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE,0);
             String WinnerName = data.getStringExtra(GameActivity.BUNDLE_EXTRA_NAME);
-            System.out.println(WinnerName+WinnerScore);
+            System.out.println("Winner = "+WinnerName+WinnerScore);
 
             //Vérification présence User
             if (WinnerName.equals(mPreferences.getString(PREF_KEY_FIRSTNAME,null))){
@@ -120,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 int i =0;
                 for (User u : mMeilleurs){
                     if (u.getFirstname()!=null && u.getFirstname().equals(mUsersave.getFirstname())){
-                        u.setScore(mUsersave.getScore());
+                        u.setScore(u.getScore()+mUsersave.getScore());
                         i++;
                     }
 
@@ -277,7 +281,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mUser.setFirstname(mPseudo.getText().toString());
                 mPreferences.edit().putString(PREF_KEY_FIRSTNAME, mUser.getFirstname()).apply();
-                mPreferences.edit().putInt(PREF_KEY_SCORE,0).apply();
+                mUser.setScore(0);
+                mPreferences.edit().putInt(PREF_KEY_SCORE, mUser.getScore()).apply();
+
                 System.out.println(mUser.toString());
                 for (User u : mMeilleurs){
                     if(u.getFirstname()!=null && u.getFirstname().equals(mUser.getFirstname())){
