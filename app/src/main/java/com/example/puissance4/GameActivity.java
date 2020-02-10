@@ -12,15 +12,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.Random;
 
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
+
+import model.User;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -44,7 +49,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase16;
 
     private ArrayList<ImageView> Cases1 = new ArrayList<ImageView>();
-    private int c1=0;
+    public int c1=0;
 
     //Button 2
     private ImageView mCase21;
@@ -55,7 +60,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase26;
 
     private ArrayList<ImageView> Cases2 = new ArrayList<ImageView>();
-    private int c2=0;
+    public int c2=0;
 
     //Button 3
     private ImageView mCase31;
@@ -66,7 +71,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase36;
 
     private ArrayList<ImageView> Cases3 = new ArrayList<ImageView>();
-    private int c3=0;
+    public int c3=0;
 
 
     //Button 4
@@ -78,7 +83,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase46;
 
     private ArrayList<ImageView>  Cases4 = new ArrayList<ImageView>();
-    private int c4=0;
+    public int c4=0;
 
 
     //Button 5
@@ -90,7 +95,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase56;
 
     private ArrayList<ImageView> Cases5 = new ArrayList<ImageView>();
-    private int c5=0;
+    public int c5=0;
 
 
     //Button 6
@@ -102,7 +107,7 @@ public class GameActivity extends AppCompatActivity {
     private ImageView mCase66;
 
     private ArrayList<ImageView> Cases6 = new ArrayList<ImageView>();
-    private int c6=0;
+    public int c6=0;
 
 
     //Button 7
@@ -125,6 +130,7 @@ public class GameActivity extends AppCompatActivity {
 
     //Sauvegarde pour changement d'activités
     public static final String BUNDLE_EXTRA_SCORE ="BUNDLE_EXTRA_SCORE";
+    public static final String BUNDLE_EXTRA_NAME ="BUNDLE_EXTRA_NAME";
 
     //Sauvegarde pour instance
     public static final String BUNDLE_STATE_SCORE = "currentScore";
@@ -134,7 +140,10 @@ public class GameActivity extends AppCompatActivity {
     private  static  final String BUNDLE_STATE_C1 = "ValeurC1";
 
 
-    private int mScore;
+    private int mWinner =0;
+    private int mMode;
+    private User mUser1;
+    private User mUser2;
 
     private boolean TourJoueur = true;
 
@@ -144,45 +153,89 @@ public class GameActivity extends AppCompatActivity {
             if (TourJoueur) {
                 c.get(y).setColorFilter(Color.argb(255, 255, 0, 0));
                 tab[y][x]=1;
+                System.out.println("Rouge y:"+y+"  x:"+x);
                 TourJoueur = false;
+
             } else {
                 c.get(y).setColorFilter(Color.argb(255, 0, 0, 255));
                 tab[y][x]=2;
+                System.out.println("Bleu y:"+y+"  x:"+x);
+
                 TourJoueur = true;
             }
             y++;
         }
-        boolean Stop =Gagner(tab);
-        if (Stop)
+        mWinner =Gagner(tab);
+        if (mWinner !=0)
             FinJeu();
 
         return y;
     }
 
-    public boolean Gagner(int[][] table){
+
+    public void AutoPlay() {
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Random r = new Random();
+                int rd=r.nextInt((7 - 1) + 1) + 1;
+                System.out.println("Random: "+rd);
+
+                switch (rd) {
+                    case 1:
+                        c1 = Apparition(Cases1, c1, 0);
+                        break;
+                    case 2:
+                        c2 = Apparition(Cases2, c2, 1);
+                        break;
+                    case 3:
+                        c3 = Apparition(Cases3, c3, 2);
+                        break;
+                    case 4:
+                        c4 = Apparition(Cases4, c4, 3);
+                        break;
+                    case 5:
+                        c5 = Apparition(Cases5, c5, 4);
+                        break;
+                    case 6:
+                        c6 = Apparition(Cases6, c6, 5);
+                        break;
+                    case 7:
+                        c7 = Apparition(Cases7, c7, 6);
+                        break;
+                }
+            }
+        }, 1000);
+
+    }
+
+
+    public int Gagner(int[][] table){
         for (int i = 0; i < table.length; i++) {
             for (int j = 0; j < table[i].length; j++) {
                 try {
                     if (table[i][j]!= 0){
                         // Vérification vertical
                         if (table[i][j] == table[i + 1][j] && table[i + 1][j] == table[i + 2][j] && table[i + 2][j] == table[i + 3][j])
-                            return true;
+                            return table[i][j];
                             //Vérification horizontal
                         else if (table[i][j] == table[i][j + 1] && table[i][j + 1] == table[i][j + 2] && table[i][j + 2] == table[i][j + 3])
-                            return true;
+                            return table[i][j];
                             //verification diagonale
                         else if (table[i][j] == table[i + 1][j + 1] && table[i + 1][j + 1] == table[i + 2][j + 2] && table[i + 2][j + 2] == table[i + 3][j + 3])
-                            return true;
+                            return table[i][j];
                             //verification diagonale
                         else if (table[i][j] == table[i - 1][j + 1] && table[i - 1][j + 1] == table[i - 2][j + 2] && table[i - 2][j + 2] == table[i - 3][j + 3])
-                            return true;
+                            return table[i][j];
                     }
                 }
                 catch(Exception e){
                     }
             }
         }
-        return false;
+        return 0;
     }
 
     public int[][] tab =new int[6][7];
@@ -193,13 +246,23 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        mPlayer1 = findViewById(R.id.Player1);
-        mPlayer2 = findViewById(R.id.Player2);
+
 
         Intent ActivData = getIntent();
-        mPlayer1.setText(ActivData.getStringExtra("Username1"));
+        mMode = ActivData.getIntExtra("MODE",0);
+        System.out.println(mMode);
 
-        mPlayer2.setText(ActivData.getStringExtra("Username2"));
+        mPlayer1 = findViewById(R.id.Player1);
+        mUser1 = new User(ActivData.getStringExtra("Username1"),ActivData.getIntExtra("Userscore1",0));
+        System.out.println(mUser1.toString());
+
+        mPlayer2 = findViewById(R.id.Player2);
+        mUser2 = new User(ActivData.getStringExtra("Username2"),ActivData.getIntExtra("Userscore2",0));
+        System.out.println(mUser2.toString());
+
+        mPlayer1.setText(mUser1.getFirstname());
+
+        mPlayer2.setText(mUser2.getFirstname());
 
         mCol1 = findViewById(R.id.button1);
         mCol2 = findViewById(R.id.button2);
@@ -282,50 +345,87 @@ public class GameActivity extends AppCompatActivity {
         mCol1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c1=Apparition(Cases1,c1,0);
+                if (mMode==1)
+                    c1=Apparition(Cases1,c1,0);
+                if (mMode==2) {
+                    c1 = Apparition(Cases1, c1, 0);
+                    AutoPlay();
+                }
+
             }
         });
 
         mCol2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c2=Apparition(Cases2,c2,1);
+                if (mMode==1)
+                    c2=Apparition(Cases2,c2,1);
+                if (mMode==2) {
+                    c2 = Apparition(Cases2, c2, 1);
+                    AutoPlay();
+                }
             }
         });
 
         mCol3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c3=Apparition(Cases3,c3,2);
+                if (mMode==1)
+                    c3=Apparition(Cases3,c3,2);
+                if (mMode==2) {
+                    c3 = Apparition(Cases3, c3, 2);
+                    AutoPlay();
+                }
             }
         });
 
         mCol4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c4=Apparition(Cases4,c4,3);
+                if (mMode == 1)
+                    c4 = Apparition(Cases4, c4, 3);
+                if (mMode == 2) {
+                    c4 = Apparition(Cases4, c4, 3);
+                    AutoPlay();
+                }
             }
         });
 
         mCol5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c5=Apparition(Cases5,c5,4);
+                    if (mMode==1)
+                        c5=Apparition(Cases5,c5,4);
+                    if (mMode==2) {
+                        c5 = Apparition(Cases5, c5, 4);
+                        AutoPlay();
+                    }
             }
+
         });
 
         mCol6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c6=Apparition(Cases6,c6,5);
-            }
+                    if (mMode==1)
+                        c6=Apparition(Cases6,c6,5);
+                    if (mMode==2){
+                        c6=Apparition(Cases6,c6,5);
+                        AutoPlay();
+                    }
+
+        }
         });
 
         mCol7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                c7=Apparition(Cases7,c7,6);
-
+                    if (mMode==1)
+                        c7=Apparition(Cases7,c7,6);
+                    if (mMode==2) {
+                        c7 = Apparition(Cases7, c7, 6);
+                        AutoPlay();
+                    }
             }
 
         });
@@ -333,12 +433,12 @@ public class GameActivity extends AppCompatActivity {
 
 
         if (savedInstanceState != null) {
-            mScore = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
-            System.out.println("Score dans saved instance" +mScore);
+            mWinner = savedInstanceState.getInt(BUNDLE_STATE_SCORE);
+            System.out.println("Score dans saved instance" +mWinner);
 
         } else {
-            mScore = 0;
-            System.out.println("Score dans dans le else" +mScore);
+            mWinner = 0;
+            System.out.println("Score dans dans le else" +mWinner);
         }
 
     }
@@ -346,7 +446,7 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
 
-        outState.putInt(BUNDLE_STATE_SCORE, mScore);
+        outState.putInt(BUNDLE_STATE_SCORE, mWinner);
         outState.putInt(BUNDLE_STATE_C1,c1);
 
         super.onSaveInstanceState(outState);
@@ -355,16 +455,25 @@ public class GameActivity extends AppCompatActivity {
 
     public void FinJeu(){
         //Boîte de dialogue
-        mScore ++;
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Gagné")
-                .setMessage("Le Joueur: " + "Untel" +"  a Gagné!!")
+                .setMessage("Le Joueur: " + mWinner+"  a Gagné!!")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         //Fin de l'activité
                         Intent intent =new Intent();
-                        intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
+                        if(mWinner==1){
+                            intent.putExtra(BUNDLE_EXTRA_SCORE, mUser1.getScore()+1);
+                            intent.putExtra(BUNDLE_EXTRA_NAME, mUser1.getFirstname());
+                        }
+                        else if(mWinner==2){
+                            intent.putExtra(BUNDLE_EXTRA_SCORE, mUser2.getScore()+1);
+                            intent.putExtra(BUNDLE_EXTRA_NAME, mUser2.getFirstname());
+                        }
+                        else
+                            intent.putExtra(BUNDLE_EXTRA_SCORE, mWinner);
+
                         setResult(RESULT_OK,intent);
                         finish();
                     }
@@ -374,7 +483,8 @@ public class GameActivity extends AppCompatActivity {
                     public void onDismiss(DialogInterface dialog) {
                         //Fin de l'activité (Cas ou l'user ferme le dialogue sans passer par "ok"
                         Intent intent =new Intent();
-                        intent.putExtra(BUNDLE_EXTRA_SCORE, mScore);
+
+                        intent.putExtra(BUNDLE_EXTRA_SCORE, mWinner);
                         setResult(RESULT_OK,intent);
                         finish();
                     }

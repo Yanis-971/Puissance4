@@ -93,11 +93,43 @@ public class MainActivity extends AppCompatActivity {
     //Au résultat du Game
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(GAME_ACTIVITY_REQUEST_CODE == requestCode && RESULT_OK == resultCode){
-            int score = mPreferences.getInt(PREF_KEY_SCORE,0) + data.getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE,0);
+            //int score = mPreferences.getInt(PREF_KEY_SCORE,0);
+            int WinnerScore = data.getIntExtra(GameActivity.BUNDLE_EXTRA_SCORE,0);
+            String WinnerName = data.getStringExtra(GameActivity.BUNDLE_EXTRA_NAME);
+            System.out.println(WinnerName+WinnerScore);
 
-            mClassement.setEnabled(true);
+            //Vérification présence User
+            if (WinnerName.equals(mPreferences.getString(PREF_KEY_FIRSTNAME,null))){
+                mPreferences.edit().putInt(PREF_KEY_SCORE,WinnerScore).apply();
+                mUser.setScore(WinnerScore);
+                mUser.setFirstname(WinnerName);
 
-            mPreferences.edit().putInt(PREF_KEY_SCORE,score).apply();
+                int i=0;
+
+                for (User u : mMeilleurs){
+                    if (u.getFirstname()!= null && u.getFirstname().equals(mUser.getFirstname())) {
+                        u.setScore(mUser.getScore());
+                        i++;
+                    }
+                }
+                if (i==0)
+                    mMeilleurs.add(mUser);
+            }
+            else{
+                User mUsersave = new User(WinnerName,WinnerScore);
+                int i =0;
+                for (User u : mMeilleurs){
+                    if (u.getFirstname()!=null && u.getFirstname().equals(mUsersave.getFirstname())){
+                        u.setScore(mUsersave.getScore());
+                        i++;
+                    }
+
+                }
+                if (i==0)
+                    mMeilleurs.add(mUsersave);
+
+            }
+
 
             //Coloration du message du résultat de l'actvité Game_Activity
             SpannableStringBuilder spannable = new SpannableStringBuilder("Dernier Match :  a     ");
@@ -122,13 +154,13 @@ public class MainActivity extends AppCompatActivity {
             spannable.insert(16, mPreferences.getString(PREF_KEY_FIRSTNAME,null));
             spannable.insert(17, Integer.toString(mPreferences.getInt(PREF_KEY_SCORE,0)));
 
+            mClassement.setEnabled(true);
+
             mBienvenue.setText(spannable);
             mPseudo.setText(mPreferences.getString(PREF_KEY_FIRSTNAME,null));
-            mUser.setScore(score);
 
-            User mUsersave = new User(mPreferences.getString(PREF_KEY_FIRSTNAME,null),mPreferences.getInt(PREF_KEY_SCORE,0));
-            System.out.println(mUsersave.toString());
-            mMeilleurs.add(mUsersave);
+
+
 
 
            Collections.sort(mMeilleurs,compareScore);
@@ -188,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
             //Colorer du texte
 
-            SpannableStringBuilder spannable = new SpannableStringBuilder("A la dernière partie  a Jouer.");
+            SpannableStringBuilder spannable = new SpannableStringBuilder("A la dernière partie  a Gagné.");
             spannable.setSpan(
                     new ForegroundColorSpan(Color.parseColor("#FFA000")),
                     20, // start
@@ -210,8 +242,12 @@ public class MainActivity extends AppCompatActivity {
             spannable.insert(21, mPreferences.getString(PREF_KEY_FIRSTNAME,null));
 
 
+
+            mUser.setFirstname(mPreferences.getString(PREF_KEY_FIRSTNAME,null));
+            mUser.setScore(mPreferences.getInt(PREF_KEY_SCORE,0));
+
             mBienvenue.setText(spannable);
-            mPseudo.setText(mPreferences.getString(PREF_KEY_FIRSTNAME,null));
+            mPseudo.setText(mUser.getFirstname());
             mJouer.setEnabled(true);
         }
 
@@ -241,6 +277,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mUser.setFirstname(mPseudo.getText().toString());
                 mPreferences.edit().putString(PREF_KEY_FIRSTNAME, mUser.getFirstname()).apply();
+                mPreferences.edit().putInt(PREF_KEY_SCORE,0).apply();
+                System.out.println(mUser.toString());
+                for (User u : mMeilleurs){
+                    if(u.getFirstname()!=null && u.getFirstname().equals(mUser.getFirstname())){
+                        mPreferences.edit().putInt(PREF_KEY_SCORE,u.getScore()).apply();
+                        break;
+                    }
+                }
+                mUser.setScore(mPreferences.getInt(PREF_KEY_SCORE,0));
+                System.out.println(mUser.toString());
+
                 ChoixOptions();
 
 
@@ -301,7 +348,9 @@ public class MainActivity extends AppCompatActivity {
                     mUser2.setFirstname(mPseudo2.getText().toString());
                     Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
                     gameActivity.putExtra("Username1",mUser.getFirstname());
+                    gameActivity.putExtra("Userscore1",mUser.getScore());
                     gameActivity.putExtra("Username2",mUser2.getFirstname());
+                    gameActivity.putExtra("Userscore2",mUser2.getScore());
                     gameActivity.putExtra("MODE",1);
                     System.out.println(mPseudo.getText()+"gettext()  "+mPseudo.getText().toString()+"tostring()");
                     startActivityForResult(gameActivity,GAME_ACTIVITY_REQUEST_CODE);
@@ -323,7 +372,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent gameActivity = new Intent(MainActivity.this, GameActivity.class);
-                gameActivity.putExtra("Username1",mPseudo.getText().toString());
+                gameActivity.putExtra("Username1",mUser.getFirstname());
+                gameActivity.putExtra("Userscore1",mUser.getScore());
                 gameActivity.putExtra("Username2","COM");
                 gameActivity.putExtra("MODE",2);
                 startActivityForResult(gameActivity,GAME_ACTIVITY_REQUEST_CODE);
