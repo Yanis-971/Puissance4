@@ -125,6 +125,7 @@ public class GameActivity extends AppCompatActivity {
 
     private TextView mPlayer1;
     private TextView mPlayer2;
+    DataBase myDB;
 
     ////////
 

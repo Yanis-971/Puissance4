@@ -3,6 +3,7 @@ package com.example.puissance4;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -23,6 +24,9 @@ public class ClassementActivity extends AppCompatActivity {
     public static final String BEST_SCORE = "BEST_SCORE";
     public static final String BEST_FIRSTNAME = "BEST_FIRSTNAME";
     private ArrayList<SharedPreferences> mListe= new ArrayList<>();
+    //
+    ArrayList<User> mClass= new ArrayList<>();
+    //
     private SharedPreferences mPreferences;
     public static final int MAIN_ACTIVITY_REQUEST_CODE = 1;
     private User mU1;
@@ -30,6 +34,7 @@ public class ClassementActivity extends AppCompatActivity {
     private  User mU3;
     private  User mU4;
     private  User mU5;
+    DataBase myDB;
 
 
     Comparator<User> compareFirstname = new Comparator<User>() {
@@ -50,6 +55,7 @@ public class ClassementActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classement);
+        myDB = new DataBase(this);
 
         mClassement = (ListView) findViewById(R.id.classement_main_classement_list);
         mNumerique = (Button) findViewById(R.id.classement_main_numerique_btn);
@@ -59,7 +65,11 @@ public class ClassementActivity extends AppCompatActivity {
         //mListe= data.getIntExtra(MainActivity.BUNDLE_BEST_SCORE,0);
 
 
+        //Cursor res = myDB.getAllData();
+         mClass=myDB.ListUser();
 
+
+        /*
         final ArrayList<User> arrayList = new ArrayList<>();
 
         mU1 = new User(mPreferences.getString("PREMIER_PSEUDO",null),mPreferences.getInt("PREMIER_SCORE",0));
@@ -83,16 +93,16 @@ public class ClassementActivity extends AppCompatActivity {
         if (mU5.getFirstname() !=null){
             arrayList.add(mU5);
         }
+       */
 
-
-        final ArrayAdapter arrayAdapter= new ArrayAdapter(this,android.R.layout.simple_list_item_1,arrayList);
+        final ArrayAdapter arrayAdapter= new ArrayAdapter(this,android.R.layout.simple_list_item_1,mClass);
 
         mClassement.setAdapter(arrayAdapter);
 
         mAlphabetique.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collections.sort(arrayList, compareFirstname);
+                Collections.sort(mClass, compareFirstname);
                 mClassement.setAdapter(arrayAdapter);
             }
         });
@@ -100,8 +110,8 @@ public class ClassementActivity extends AppCompatActivity {
         mNumerique.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Collections.sort(arrayList, compareScore);
-                Collections.reverse(arrayList);
+                Collections.sort(mClass, compareScore);
+                Collections.reverse(mClass);
                 mClassement.setAdapter(arrayAdapter);
             }
         });
