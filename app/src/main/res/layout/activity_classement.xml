@@ -13,10 +13,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/open_sans_bold"
         android:text="Classement"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:layout_margin="10dp"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/classement_main_classement_list"

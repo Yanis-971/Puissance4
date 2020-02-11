@@ -19,6 +19,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.android.material.card.MaterialCardView;
+
 import java.util.Random;
 
 
@@ -125,6 +128,11 @@ public class GameActivity extends AppCompatActivity {
 
     private TextView mPlayer1;
     private TextView mPlayer2;
+    private ImageView mImgPlayer1;
+    private MaterialCardView mCard1;
+    private ImageView mImgPlayer2;
+    private MaterialCardView mCard2;
+
     DataBase myDB;
 
     ////////
@@ -152,15 +160,15 @@ public class GameActivity extends AppCompatActivity {
 
         if (y < 6) {
             if (TourJoueur) {
-                c.get(y).setColorFilter(Color.argb(255, 255, 0, 0));
+                c.get(y).setColorFilter(Color.argb(255, 226, 5, 5));
                 tab[y][x]=1;
                 System.out.println("Rouge y:"+y+"  x:"+x);
                 TourJoueur = false;
 
             } else {
-                c.get(y).setColorFilter(Color.argb(255, 0, 0, 255));
+                c.get(y).setColorFilter(Color.argb(255, 255, 143, 0));
                 tab[y][x]=2;
-                System.out.println("Bleu y:"+y+"  x:"+x);
+                System.out.println("Jaune y:"+y+"  x:"+x);
 
                 TourJoueur = true;
             }

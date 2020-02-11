@@ -30,6 +30,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -39,10 +44,10 @@ import model.User;
 public class MainActivity extends AppCompatActivity {
 
     private TextView mBienvenue;
-    private EditText mPseudo;
-    private EditText mPseudo2;
-    private Button mJouer;
-    private Button mClassement;
+    private TextInputEditText mPseudo;
+    private TextInputEditText mPseudo2;
+    private MaterialButton mJouer;
+    private MaterialButton mClassement;
     private boolean V2ok = false;
 
     private User mUser;
@@ -116,12 +121,13 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         myDB = new DataBase(this);
 
-        mBienvenue = (TextView) findViewById(R.id.activity_main_bievenue_txt);
-        mPseudo = (EditText) findViewById(R.id.activity_main_pseudo_input);
-        mJouer = (Button) findViewById(R.id.activity_main_jouer_btn);
-        mClassement = (Button) findViewById(R.id.activity_main_classement_btn);
+        mBienvenue = findViewById(R.id.activity_main_bievenue_txt);
+        mPseudo =  findViewById(R.id.TestInput);
+        mJouer = findViewById(R.id.activity_main_jouer_btn);
+        mClassement = findViewById(R.id.activity_main_classement_btn);
         mUser =new User();
         mUser2=new User();
+
 
 
         mJouer.setEnabled(false);
@@ -209,11 +215,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void ChoixOptions(){
-        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
         View mView = getLayoutInflater().inflate(R.layout.activity_dialog,null);
         TextView mTitle = mView.findViewById(R.id.Title);
-        Button mVersus = mView.findViewById((R.id.Versus));
-        Button mSolo = mView.findViewById((R.id.Solo));
+        MaterialButton mVersus = mView.findViewById((R.id.Versus));
+        MaterialButton mSolo = mView.findViewById((R.id.Solo));
+        final TextInputLayout mContain = mView.findViewById(R.id.Username22);
         mPseudo2 = mView.findViewById(R.id.Username2);
         mPseudo2.addTextChangedListener(new TextWatcher() {
             @Override
@@ -265,7 +272,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 else {
-                    mPseudo2.setVisibility(View.VISIBLE);
+                    mContain.setVisibility(View.VISIBLE);
                     Toast.makeText(MainActivity.this, "Enter 2nd Username", Toast.LENGTH_SHORT).show();
 
                 }
